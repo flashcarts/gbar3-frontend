@@ -30,12 +30,35 @@
 
 #include "args.h"
 #include "file_browse.h"
-#include "hbmenu_banner.h"
+#include "font.h"
+#include "hbmenu_consolebg.h"
 #include "iconTitle.h"
 #include "nds_loader_arm9.h"
 
 
 using namespace std;
+
+void InitGUI(void) {
+	iconTitleInit();
+	videoSetModeSub(MODE_4_2D);
+	vramSetBankC(VRAM_C_SUB_BG);
+	int bgSub = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
+	PrintConsole *console = consoleInit(0, 0, BgType_Text4bpp, BgSize_T_256x256, 4, 6, false, false);
+	dmaCopy(hbmenu_consolebgBitmap, bgGetGfxPtr(bgSub), 256*256);
+	ConsoleFont font;
+	font.gfx = (u16*)fontTiles;
+	font.pal = (u16*)fontPal;
+	font.numChars = 95;
+	font.numColors = (fontPalLen / 2);
+	font.bpp = 4;
+	font.asciiOffset = 32;
+	font.convertSingleColor = true;
+	consoleSetFont(console, &font);
+	dmaCopy(hbmenu_consolebgPal, BG_PALETTE_SUB, 256*2);
+	BG_PALETTE_SUB[255] = RGB15(31,31,31);
+	keysSetRepeat(25,5);
+	consoleSetWindow(console, 1, 1, 30, 22);
+}
 
 //---------------------------------------------------------------------------------
 void stop (void) {
@@ -53,20 +76,11 @@ int main(int argc, char **argv) {
 	// so tapping power on DSi returns to DSi menu
 	extern u64 *fake_heap_end;
 	*fake_heap_end = 0;
-
-	iconTitleInit();
-
-	// Subscreen as a console
-	videoSetModeSub(MODE_0_2D);
-	vramSetBankH(VRAM_H_SUB_BG);
-	consoleInit(NULL, 0, BgType_Text4bpp, BgSize_T_256x256, 15, 0, false, true);
-
+	InitGUI();
 	if (!fatInitDefault()) {
-		iprintf ("fatinitDefault failed!\n");
+		iprintf ("\n\nfatinitDefault failed!\n");
 		stop();
 	}
-
-	keysSetRepeat(25,5);
 
 	vector<string> extensionList = argsGetExtensionList();
 

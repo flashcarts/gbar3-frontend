@@ -32,8 +32,8 @@
 
 #include "iconTitle.h"
 
-#define SCREEN_COLS 32
-#define ENTRIES_PER_SCREEN 22
+#define SCREEN_COLS 30
+#define ENTRIES_PER_SCREEN 20
 #define ENTRIES_START_ROW 2
 #define ENTRY_PAGE_LENGTH 10
 
@@ -114,8 +114,8 @@ void showDirectoryContents (const vector<DirEntry>& dirContents, int startRow) {
 	getcwd(path, PATH_MAX);
 
 	// Clear the screen
-	iprintf ("\x1b[2J");
-
+	consoleClear();
+	
 	// Print the path
 	if (strlen(path) < SCREEN_COLS) {
 		iprintf ("%s", path);
@@ -126,7 +126,7 @@ void showDirectoryContents (const vector<DirEntry>& dirContents, int startRow) {
 	// Move to 2nd row
 	iprintf ("\x1b[1;0H");
 	// Print line of dashes
-	iprintf ("--------------------------------");
+	iprintf ("------------------------------");
 
 	// Print directory listing
 	for (int i = 0; i < ((int)dirContents.size() - startRow) && i < ENTRIES_PER_SCREEN; i++) {
@@ -204,7 +204,7 @@ string browseForFile (const vector<string>& extensionList) {
 				showDirectoryContents (dirContents, screenOffset);
 			} else {
 				// Clear the screen
-				iprintf ("\x1b[2J");
+				consoleClear();
 				// Return the chosen file
 				return entry->name;
 			}
