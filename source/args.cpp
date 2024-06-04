@@ -34,6 +34,7 @@
 
 using namespace std;
 
+static const string GBA_EXT = ".gba";
 static const string NDS_EXT = ".nds";
 static const string ARG_EXT = ".argv";
 static const string EXT_EXT = ".ext";
@@ -235,6 +236,13 @@ bool argsFillArray(const string& filePath, vector<string>& argarray) {
 			return false;
 		}
 		argarray[0] = absPath;
+	} else if (strCaseEnd(filePath, GBA_EXT)) {
+		string absPath;
+		if(!toAbsPath(filePath, NULL, absPath)) {
+			return false;
+		}
+		argarray.push_back(GBARUNNER3_PATH);
+		argarray.push_back(move(absPath));
 	} else {
 		// This is a data file associated with a handler NDS by an ext file
 		string extPath;
@@ -271,6 +279,7 @@ vector<string> argsGetExtensionList() {
 	// Always supported files: NDS binaries and predefined argument lists
 	extensionList.push_back(NDS_EXT);
 	extensionList.push_back(ARG_EXT);
+	extensionList.push_back(GBA_EXT);
 
 	// Get a list of extension files: argument lists associated with a file type
 	DIR *dir = opendir (EXT_DIR);
