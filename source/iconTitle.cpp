@@ -201,20 +201,25 @@ void iconTitleUpdate (int isdir, const std::string& name) {
 		// close file!
 		fclose (fp);
 
-		// turn unicode into ascii (kind of)
-		// and convert 0x0A into 0x00
-		char *p = (char*)banner.titles[0];
-		for (size_t i = 0; i < sizeof(banner.titles[0]); i = i+2) {
-			if ((p[i] == 0x0A) || (p[i] == 0xFF))
-				p[i/2] = 0;
-			else
-				p[i/2] = p[i];
-		}
+		// Do something special for GBA stuff
+		if (ndsPath == GBARUNNER3_PATH) {
+			writeRow (2, "GameBoy Advance ROM");
+		} else {
+			// turn unicode into ascii (kind of)
+			// and convert 0x0A into 0x00
+			char *p = (char*)banner.titles[0];
+			for (size_t i = 0; i < sizeof(banner.titles[0]); i = i+2) {
+				if ((p[i] == 0x0A) || (p[i] == 0xFF))
+					p[i/2] = 0;
+				else
+					p[i/2] = p[i];
+			}
 
-		// text
-		for (size_t i = 0; i < 3; ++i) {
-			writeRow(i+1, p);
-			p += strlen(p) + 1;
+			// text
+			for (size_t i = 0; i < 3; ++i) {
+				writeRow(i+1, p);
+				p += strlen(p) + 1;
+			}
 		}
 
 		// icon
