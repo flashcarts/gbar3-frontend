@@ -70,7 +70,12 @@ int main(int argc, char **argv) {
 
 	vector<string> extensionList = argsGetExtensionList();
 
-	chdir("/nds");
+	if(!access("/ROMs/gba", F_OK)) {
+		chdir("/ROMs/gba");
+	}
+	else {
+		chdir("/");
+	}
 
 	while(1) {
 
