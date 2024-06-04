@@ -23,7 +23,7 @@ VERSION	:=	$(HBMENU_MAJOR).$(HBMENU_MINOR).$(HBMENU_PATCH)
 # DATA is a list of directories containing binary files embedded using bin2o
 # GRAPHICS is a list of directories containing image files to be converted with grit
 #---------------------------------------------------------------------------------
-TARGET		:=	hbmenu
+TARGET		:=	gbar3-frontend
 BUILD		:=	build
 SOURCES		:=	source
 INCLUDES	:=	include
