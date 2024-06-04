@@ -114,24 +114,9 @@ else
 	endif
 endif
 
-.PHONY: bootloader bootstub BootStrap exceptionstub $(BUILD) clean cia
+.PHONY: bootloader bootstub exceptionstub $(BUILD) clean
 
-all:	bootloader bootstub exceptionstub $(BUILD) BootStrap
-
-cia:
-	$(MAKE) -C BootStrap bootstrap.cia
-
-dist:	all
-	rm	-fr	hbmenu
-	mkdir -p hbmenu/nds
-	cp hbmenu.nds hbmenu/BOOT.NDS
-	cp BootStrap/_BOOT_MP.NDS BootStrap/TTMENU.DAT BootStrap/_ds_menu.dat BootStrap/ez5sys.bin BootStrap/akmenu4.nds BootStrap/ismat.dat hbmenu
-	cp -r BootStrap/ACE3DS hbmenu
-ifneq (,$(wildcard BootStrap/bootstrap.cia))
-	cp "BootStrap/bootstrap.cia" hbmenu
-endif
-	cp testfiles/* hbmenu/nds
-	zip -9r hbmenu-$(VERSION).zip hbmenu README.md COPYING
+all:	bootloader bootstub exceptionstub $(BUILD)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
@@ -144,7 +129,6 @@ clean:
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).arm9 data
 	@$(MAKE) -C bootloader clean
 	@$(MAKE) -C bootstub clean
-	@$(MAKE) -C BootStrap clean
 	@$(MAKE) -C nds-exception-stub clean
 
 data:
@@ -158,9 +142,6 @@ exceptionstub: data
 
 bootstub: data
 	@$(MAKE) -C bootstub
-
-BootStrap:
-	@$(MAKE) -C BootStrap
 
 #---------------------------------------------------------------------------------
 else
