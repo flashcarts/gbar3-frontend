@@ -199,6 +199,9 @@ bool argsNdsPath(const std::string& filePath, std::string& ndsPath) {
 		return true;
 	} else	if (strCaseEnd(filePath, ARG_EXT)) {
 		return parseArgFileNds(filePath, ndsPath);
+	} else if (strCaseEnd(filePath, GBA_EXT)) {
+		ndsPath = GBARUNNER3_PATH;
+		return true;
 	} else {
 		// This is a data file associated with a handler NDS by an ext file
 		string extPath;
