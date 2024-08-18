@@ -30,6 +30,8 @@ INCLUDES	:=	include
 DATA		:=	data
 GRAPHICS	:=  gfx
 
+GBARUNNER3_PATH ?= DEFAULT
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
@@ -40,6 +42,12 @@ CFLAGS	:=	-g -Wall -O2 \
  		-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
 		-ffast-math \
 		$(ARCH)
+
+ifeq ($(GBARUNNER3_PATH),TWLMENU)
+CFLAGS	+=	-DWITH_TWLMENU
+else ifeq ($(GBARUNNER3_PATH),AOS)
+CFLAGS	+=	-DWITH_AOS
+endif
 
 CFLAGS	+=	$(INCLUDE) -DARM9
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions

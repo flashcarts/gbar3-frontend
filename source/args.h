@@ -27,8 +27,14 @@
 #include <string>
 #include <vector>
 
-#ifndef GBARUNNER3_PATH
+#ifdef WITH_AOS
 #define GBARUNNER3_PATH "/__rpg/APP/GBARunner3.nds"
+#endif
+#ifdef WITH_TWLMENU
+#define GBARUNNER3_PATH "/_nds/TWiLightMenu/emulators/GBARunner3.nds"
+#endif
+#ifndef GBARUNNER3_PATH
+#define GBARUNNER3_PATH "/GBARunner3.nds"
 #endif
 
 /* Convert a file path of any type (e.g. .nds or .argv) into a path to the NDS
