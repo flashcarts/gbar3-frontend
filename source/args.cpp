@@ -30,6 +30,8 @@
 #include <utility>
 #include <vector>
 
+#include <nds.h>
+
 #include "args.h"
 
 using namespace std;
@@ -244,7 +246,10 @@ bool argsFillArray(const string& filePath, vector<string>& argarray) {
 		if(!toAbsPath(filePath, NULL, absPath)) {
 			return false;
 		}
-		argarray.push_back(GBARUNNER3_PATH);
+		if(isDSiMode())
+			argarray.push_back(GBARUNNER3_PATH_SD);
+		else
+			argarray.push_back(GBARUNNER3_PATH);
 		argarray.push_back(move(absPath));
 	} else {
 		// This is a data file associated with a handler NDS by an ext file
