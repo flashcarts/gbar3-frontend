@@ -63,7 +63,7 @@ void InitGUI(void) {
 //---------------------------------------------------------------------------------
 void stop (void) {
 //---------------------------------------------------------------------------------
-	while (1) {
+	while (pmMainLoop()) {
 		swiWaitForVBlank();
 	}
 }
@@ -74,9 +74,13 @@ int main(int argc, char **argv) {
 
 	// overwrite reboot stub identifier
 	// so tapping power on DSi returns to DSi menu
-	extern u64 *fake_heap_end;
-	*fake_heap_end = 0;
+	pmClearResetJumpTarget();
+
+	// install exception stub
+	installExcptStub();
+
 	InitGUI();
+
 	if (!fatInitDefault()) {
 		iprintf ("\n\nfatinitDefault failed!\n");
 		stop();
@@ -91,9 +95,12 @@ int main(int argc, char **argv) {
 		chdir("/");
 	}
 
-	while(1) {
+	while(pmMainLoop()) {
 
 		string filename = browseForFile(extensionList);
+		if (filename.empty()) {
+			continue;
+		}
 
 		// Construct a command line
 		vector<string> argarray;
@@ -115,7 +122,7 @@ int main(int argc, char **argv) {
 
 		argarray.clear();
 
-		while (1) {
+		while (pmMainLoop()) {
 			swiWaitForVBlank();
 			scanKeys();
 			if (!(keysHeld() & KEY_A)) break;

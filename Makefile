@@ -10,7 +10,7 @@ endif
 include $(DEVKITARM)/ds_rules
 
 export HBMENU_MAJOR	:= 0
-export HBMENU_MINOR	:= 9
+export HBMENU_MINOR	:= 10
 export HBMENU_PATCH	:= 0
 
 
@@ -127,7 +127,7 @@ endif
 all:	bootloader bootstub exceptionstub $(BUILD)
 
 #---------------------------------------------------------------------------------
-$(BUILD):
+$(BUILD): bootloader bootstub exceptionstub
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
