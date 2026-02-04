@@ -246,10 +246,10 @@ bool argsFillArray(const string& filePath, vector<string>& argarray) {
 		if(!toAbsPath(filePath, NULL, absPath)) {
 			return false;
 		}
-		if(isDSiMode())
+		if(isDSiMode() && access("fat:/", F_OK) != 0)
 			argarray.push_back(GBARUNNER3_PATH_SD);
 		else
-			argarray.push_back(GBARUNNER3_PATH);
+			argarray.push_back(GBARUNNER3_PATH_FAT);
 		argarray.push_back(move(absPath));
 	} else {
 		// This is a data file associated with a handler NDS by an ext file

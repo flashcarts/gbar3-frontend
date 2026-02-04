@@ -38,6 +38,7 @@
 #endif
 
 #define GBARUNNER3_PATH_SD "sd:" GBARUNNER3_PATH
+#define GBARUNNER3_PATH_FAT "fat:" GBARUNNER3_PATH
 
 /* Convert a file path of any type (e.g. .nds or .argv) into a path to the NDS
  * file to be opened. The returned path may be absolute or relative to the
