@@ -35,15 +35,25 @@ void __attribute__ ((long_call)) __attribute__((naked)) __attribute__((noreturn)
 
 	VRAM_CR = (VRAM_CR & 0xffff0000) | 0x00008080 ;
 	
-	vu16 *mainregs = (vu16*)0x04000000;
-	vu16 *subregs = (vu16*)0x04001000;
-	
-	for (i=0; i<43; i++) {
-		mainregs[i] = 0;
-		subregs[i] = 0;
-	}
-	
+	vu32 *mainregs = (vu32*)0x04000000;
+	vu32 *subregs = (vu32*)0x04001000;
+
+	// Engine A: we MUST avoid writing to VCOUNT (as it is actually writable from Arm9), and we
+	// should avoid writing to MMEM_FIFO as well
+
 	REG_DISPSTAT = 0;
+	REG_DISPCNT = 0;
+
+	for (i=0x08; i<0x68; i += 4) {
+		mainregs[i / 4] = 0;
+	}
+
+	REG_MASTER_BRIGHT = 0;
+
+	// Engine B. OK to write to nonexistent regs here.
+	for (i=0x00; i<0x70; i += 4) {
+		subregs[i / 4] = 0;
+	}
 
 	VRAM_A_CR = 0;
 	VRAM_B_CR = 0;
